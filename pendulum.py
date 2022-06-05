@@ -1,49 +1,50 @@
-#Calculating energy eigenvalues
+#Calculating energy eigenvalues for an quantum pendulum
 
 import numpy as npy
 import matplotlib.pyplot as mplt
 
-N=1000
-I=300
-m=1
-g=1
-a=1
+N=300        # No. of eigenvalues
+I=300        # Moment of inertia
+m=1          # Mass
+g=1          # 'g'
+a=1          # Length of pendulum
 hbar=1
+const1 = 
 
-#kinetic energy
+# Kinetic energy
 T=npy.zeros((2*N+1)**2).reshape(2*N+1,2*N+1)
 for i in range(2*N+1):
-    for j in range(2*N+1):        #Define your Kinetic energy matrix here
+    for j in range(2*N+1):        # Define your Kinetic energy matrix here
         if i==j:
             T[i,j]=(i-N)**2*((hbar**2/I)/2)
         else:
             T[i,j]=0
             
-#potential energy
+# Potential energy
 V = npy.zeros((2*N+1)**2).reshape(2*N+1,2*N+1)
 for i in range(2*N+1):
     for j in range(2*N+1):
         if i==j:
             V[i,j]=m*g*a
-        elif npy.abs(i-j)==1:        #Define your Potential matrix here
+        elif npy.abs(i-j)==1:        # Define your Potential matrix here
             V[i,j]=-m*g*a/2
         else:
             V[i,j]=0
 
-#Hamiltonian
+# Hamiltonian
 H=T+V
 
-#eigenvalues
+# Eigenvalues and eigenvectors
 val,vec=npy.linalg.eig(H)
 z=npy.argsort(val)
-z=z[0:300]
+z=z[0:N]
 
-#output
+# Some text output
 print("1st   eigenvalue:\t",val[z][0])
 print("50th  eigenvalue:\t",val[z][49])
 print("200th eigenvalue:\t",val[z][199])
 
-#plot
+# Plot of eigenvalues
 x=npy.linspace(0,299,300)
 y=[]
 y=npy.append(y,val[z])
@@ -57,15 +58,13 @@ mplt.axis([0,300,0,40])
 mplt.grid(True)
 mplt.show()
 
-#difference between consequiutive degenerate states
+# Difference between consequiutive degenerate states
 steps=20
-aloo=[]
+A=[]
 k=41
 k0=k
-l=42
+l=42        # Degenaracy starts from 42th state
 
-#for i in range(steps):
-#    aloo=npy.append(aloo,0)
 A=npy.zeros(steps)
 for i in range(steps):
     A[i]=(val[z[l]]-val[z[k]])
